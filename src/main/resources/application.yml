@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: zuulserver
+  cloud:
+    consul:
+      host: 192.168.254.130
+      port: 8500
+      discovery:
+        register: true    #是否注册到consul中
+        instance-id: zuulserver01
+        prefer-ip-address: true
+        health-check-interval: 10s
+        hostname: 10.39.4.95
+        service-name: ${spring.application.name}
+        enabled: true
+zuul:
+  #网关前缀,设置后所有请求都必须以/api开头
+  prefix: /api
+  routes:
+    sayportservice: /wahaha/**
+    #licensestatic:
+    #  path: /static/**
+    #  url: http://localhost:8001
+hystrix:
+  command:
+    default: #如果要通过特定的服务,改成对应服务id
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2500 #2.5秒超时,hystrix激活
