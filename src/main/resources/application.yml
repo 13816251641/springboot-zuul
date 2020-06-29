@@ -5,14 +5,14 @@ spring:
     name: zuulserver
   cloud:
     consul:
-      host: 192.168.254.130
+      host: 192.168.254.130 #consul的host地址
       port: 8500
       discovery:
         register: true    #是否注册到consul中
         instance-id: zuulserver01 #网关也要配置多个,单点是瓶颈
         prefer-ip-address: true
         health-check-interval: 15s
-        hostname: 10.39.4.95
+        hostname: 10.39.4.95 #服务的host地址
         service-name: ${spring.application.name}
         enabled: true
 zuul:
@@ -20,9 +20,9 @@ zuul:
   prefix: /lujieni
   routes:
     hello: #hello只是给路由起个名字
-      service-id: sayportservice #sayportservice为consul中的服务名
-      path: /wahaha/**  # /lujieni/wahaha/zuul & /lujieni/sayportservice/zuul 都可以访问,因为默认基于服务的代理也是生效的,除非ignored-services: '*'
-  sensitive-headers:    # 敏感的请求头为空 Cookie可以被正确传递
+      service-id: sayportservice #sayportservice为consul中注册的服务名
+      path: /wahaha/**  # /lujieni/wahaha/zuul & /lujieni/sayportservice/zuul 都可以访问,因为默认基于consul中服务的代理也是生效的,除非ignored-services: '*'
+  sensitive-headers:    # 敏感的请求头为空,这样设置后Cookie才可以被正确传递
   ignored-services: '*'
 hystrix:
   command:

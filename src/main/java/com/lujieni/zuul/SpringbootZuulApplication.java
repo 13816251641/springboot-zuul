@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
-/* 设置为zuul server */
+/* 设置为zuul server 必须加 */
 @EnableZuulProxy
 public class SpringbootZuulApplication {
 
