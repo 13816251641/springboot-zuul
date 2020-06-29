@@ -9,20 +9,19 @@ spring:
       port: 8500
       discovery:
         register: true    #是否注册到consul中
-        instance-id: zuulserver01
+        instance-id: zuulserver01 #网关也要配置多个,单点是瓶颈
         prefer-ip-address: true
-        health-check-interval: 10s
+        health-check-interval: 15s
         hostname: 10.39.4.95
         service-name: ${spring.application.name}
         enabled: true
 zuul:
-  #网关前缀,设置后所有请求都必须以/api开头
-  prefix: /api
+  #网关前缀,设置后所有请求都必须以 /lujieni 开头
+  prefix: /lujieni
   routes:
-    sayportservice: /wahaha/**
-    #licensestatic:
-    #  path: /static/**
-    #  url: http://localhost:8001
+    sayportservice:
+      path: /wahaha/**  # /lujieni/wahaha/zuul & /lujieni/sayportservice/zuul 都可以访问
+  sensitive-headers:    # 敏感的请求头为空 Cookie可以被正确传递
 hystrix:
   command:
     default: #如果要通过特定的服务,改成对应服务id

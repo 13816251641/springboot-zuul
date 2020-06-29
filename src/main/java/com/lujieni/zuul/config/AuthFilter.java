@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Auther lujieni
  * @Date 2020/5/19
  */
-@Component
+//@Component
 public class AuthFilter extends ZuulFilter {
     private Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
