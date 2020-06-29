@@ -19,9 +19,11 @@ zuul:
   #网关前缀,设置后所有请求都必须以 /lujieni 开头
   prefix: /lujieni
   routes:
-    sayportservice:
-      path: /wahaha/**  # /lujieni/wahaha/zuul & /lujieni/sayportservice/zuul 都可以访问
+    hello: #hello只是给路由起个名字
+      service-id: sayportservice #sayportservice为consul中的服务名
+      path: /wahaha/**  # /lujieni/wahaha/zuul & /lujieni/sayportservice/zuul 都可以访问,因为默认基于服务的代理也是生效的,除非ignored-services: '*'
   sensitive-headers:    # 敏感的请求头为空 Cookie可以被正确传递
+  ignored-services: '*'
 hystrix:
   command:
     default: #如果要通过特定的服务,改成对应服务id
