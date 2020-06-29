@@ -3,11 +3,13 @@ package com.lujieni.zuul.config;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,12 +17,15 @@ import javax.servlet.http.HttpServletRequest;
  * @Auther lujieni
  * @Date 2020/5/19
  */
-//@Component
+@Component
 public class AuthFilter extends ZuulFilter {
     private Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
     @Override
     public String filterType() {
+        /*
+           在路由之前进行过滤
+         */
         return FilterConstants.PRE_TYPE;
     }
 
@@ -36,19 +41,25 @@ public class AuthFilter extends ZuulFilter {
         /* 获取到request */
         HttpServletRequest request = requestContext.getRequest();
         String uri = request.getRequestURI();
+        String user = request.getParameter("user");
         logger.info("===uri==={}", uri);
-        if("/api/wahaha/zuul".equals(uri)){
+        if("/lujieni/wahaha/zuul".equals(uri) && StringUtils.isEmpty(user)){
             requestContext.setSendZuulResponse(false);
             requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
             requestContext.setResponseBody("no auth");//加了chrome中才会显示401
-            return false;
+            return false;//return false代表被拦截,不会调用consul中的服务
         }
         return true;
     }
 
+    /**
+     * 过滤通过后要执行的方法
+     * @return
+     * @throws ZuulException
+     */
     @Override
     public Object run() throws ZuulException {
-        System.out.println("run");
+        logger.info("通过过滤");
         return null;
     }
 

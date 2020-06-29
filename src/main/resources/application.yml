@@ -30,4 +30,4 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 2500 #2.5秒超时,hystrix激活
+            timeoutInMilliseconds: 6000 #2.5秒超时,hystrix激活
