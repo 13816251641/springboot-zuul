@@ -1,5 +1,7 @@
 package com.lujieni.zuul.config;
 
+import com.alibaba.fastjson.JSON;
+import com.lujieni.zuul.define.Response;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -44,22 +46,29 @@ public class AuthFilter extends ZuulFilter {
         String user = request.getParameter("user");
         logger.info("===uri==={}", uri);
         if("/lujieni/wahaha/zuul".equals(uri) && StringUtils.isEmpty(user)){
+            /* false代表不往下级服务去转发请求,但下一个filter仍旧会执行哦!!! */
             requestContext.setSendZuulResponse(false);
-            requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
-            requestContext.setResponseBody("no auth");//加了chrome中才会显示401
-            return false;//return false代表被拦截,不会调用consul中的服务
+
+            Response response = new Response();
+            response.setSuccess(false);
+            response.setErrorCode(Response.ERROR_REDIRECT);
+            response.setResult("http://www.baidu.com");
+            requestContext.setResponseBody(JSON.toJSONString(response));//结果转为json
+            /* return false代表不需要过滤 */
+            return false;
         }
         return true;
     }
 
     /**
      * 过滤通过后要执行的方法
+     * 只有shouldFilter方法返回true后run方法里的逻辑才会执行
      * @return
      * @throws ZuulException
      */
     @Override
     public Object run() throws ZuulException {
-        logger.info("通过过滤");
+        logger.info("执行run方法");
         return null;
     }
 
