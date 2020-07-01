@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -38,6 +39,7 @@ public class AuthFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        logger.info("AuthFilter-shouldFilter");
         /* 获取请求上下文 */
         RequestContext requestContext = RequestContext.getCurrentContext();
         /* 获取到request */
@@ -45,6 +47,9 @@ public class AuthFilter extends ZuulFilter {
         String uri = request.getRequestURI();
         String user = request.getParameter("user");
         logger.info("===uri==={}", uri);
+        /*
+            /lujieni/wahaha/zuul且user入参为空
+         */
         if("/lujieni/wahaha/zuul".equals(uri) && StringUtils.isEmpty(user)){
             /* false代表不往下级服务去转发请求,但下一个filter仍旧会执行哦!!! */
             requestContext.setSendZuulResponse(false);
@@ -54,7 +59,7 @@ public class AuthFilter extends ZuulFilter {
             response.setErrorCode(Response.ERROR_REDIRECT);
             response.setResult("http://www.baidu.com");
             requestContext.setResponseBody(JSON.toJSONString(response));//结果转为json
-            /* return false代表不需要过滤 */
+            /* return false代表不需要过滤,不会执行后面的run方法 */
             return false;
         }
         return true;
@@ -68,7 +73,14 @@ public class AuthFilter extends ZuulFilter {
      */
     @Override
     public Object run() throws ZuulException {
-        logger.info("执行run方法");
+        logger.info("AuthFilter-run");
+        /* 获取请求上下文 */
+        RequestContext requestContext = RequestContext.getCurrentContext();
+        Cookie cookie = new Cookie("age","30");
+        cookie.setMaxAge(1800); //设置时效时间
+        cookie.setDomain("localhost");//绑定域名
+        cookie.setPath("/");
+        requestContext.getResponse().addCookie(cookie);
         return null;
     }
 
