@@ -12,7 +12,7 @@ spring:
         instance-id: zuulserver01 #网关也要配置多个,单点是瓶颈
         prefer-ip-address: true
         health-check-interval: 15s
-        hostname: 10.39.4.95 #服务的host地址
+        hostname: 10.39.4.105 #服务的host地址
         service-name: ${spring.application.name}
         enabled: true
 zuul:
@@ -33,14 +33,3 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 60000 #60秒超时,hystrix激活
-ribbon:
-  #默认情况下,GET方式请求无论是连接异常还是读取异常,都会进行重试;非GET方式请求,只有连接异常时,才会进行重试
-  ReadTimeout: 60000
-  ConnectTimeout: 10000
-  OkToRetryOnAllOperations: false #只会对get请求进行重试(连接,读取) post方式重试(连接)
-  MaxAutoRetries: 1 #如果不配置ribbon的重试次数，默认会重试一次
-  MaxAutoRetriesNextServer: 0     #不会发给另一个实例
-  httpclient:
-    enabled: false
-  okhttp:
-    enabled: true

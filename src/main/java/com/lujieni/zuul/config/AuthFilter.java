@@ -47,9 +47,9 @@ public class AuthFilter extends ZuulFilter {
         String user = request.getParameter("user");
         logger.info("===uri==={}", uri);
         /*
-            /lujieni/wahaha/zuul且user入参为空
+            /lujieni/wahaha/love/zuul且user入参为空
          */
-        if("/lujieni/wahaha/zuul".equals(uri) && StringUtils.isEmpty(user)){
+       if("/lujieni/wahaha/love/zuul".equals(uri) && StringUtils.isEmpty(user)){
             /* false代表不往下级服务去转发请求,但下一个filter仍旧会执行哦!!! */
             requestContext.setSendZuulResponse(false);
 
