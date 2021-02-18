@@ -26,7 +26,7 @@ import java.util.Map;
  * @Auther lujieni
  * @Date 2020/5/19
  */
-@Component
+//@Component
 public class AuthFilter extends ZuulFilter {
     private final static Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
@@ -63,9 +63,6 @@ public class AuthFilter extends ZuulFilter {
         logger.info("AuthFilter-shouldFilter");
         /* 获取请求上下文 */
         RequestContext requestContext = RequestContext.getCurrentContext();
-        /*
-         * 这样的方法来做判断,如果这个请求最终被拦截掉,本过滤器的run方法就不需要执行
-         */
         if(!requestContext.sendZuulResponse()){
             return false;
         }
@@ -86,7 +83,7 @@ public class AuthFilter extends ZuulFilter {
                 verifyToken(token);//校验token
             } catch (Exception e) {
                 logger.error("token非法",e);
-                requestContext.setSendZuulResponse(false);
+                requestContext.setSendZuulResponse(false);//这个请求最终不会被zuul转发到后端服务器
                 Response response = new Response();
                 response.setSuccess(false);
                 response.setErrorCode(Response.ERROR_CODE_NOT_RIGHT_TO_ACCESS);

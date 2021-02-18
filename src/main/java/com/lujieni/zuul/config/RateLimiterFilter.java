@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2021-02-18 16:11
  * @Version: 1.0
  */
-@Component
+//@Component
 public class RateLimiterFilter extends ZuulFilter {
 
     //每秒产生1000个令牌

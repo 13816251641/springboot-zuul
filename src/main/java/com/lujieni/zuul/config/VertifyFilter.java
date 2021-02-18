@@ -33,12 +33,8 @@ public class VertifyFilter extends ZuulFilter {
     public boolean shouldFilter() {
         log.info("VertifyFilter-shouldFilter");
         RequestContext currentContext = RequestContext.getCurrentContext();
-        /*
-         * 这样的方法来做判断,如果这个请求最终被拦截掉,则后面的过滤器逻辑也不需要执行了
-         *
-         */
         if(!currentContext.sendZuulResponse()){
-            return false;
+            return false;//本filter的run方法不会执行,但后面的filter仍旧会执行
         }
         return true;
     }
