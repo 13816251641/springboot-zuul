@@ -45,17 +45,18 @@
             <optional>true</optional>
         </dependency>
 
-        <!--引入网关-->
+        <!--引入网关,当中已经包含了ribbon,必加-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
 
-        <!--引入consul-->
+        <!--引入consul 必加-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->

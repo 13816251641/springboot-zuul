@@ -10,9 +10,9 @@ spring:
       discovery:
         register: true    #是否注册到consul中
         instance-id: zuulserver01 #网关也要配置多个,单点是瓶颈
-        prefer-ip-address: true
+        prefer-ip-address: false #是否显示ip地址
         health-check-interval: 15s
-        hostname: 10.39.4.105 #服务的host地址
+        hostname: 10.39.4.65 #服务的host地址
         service-name: ${spring.application.name}
         enabled: true
 zuul:
@@ -21,15 +21,10 @@ zuul:
   routes:
     hello: #hello只是给路由起个名字
       service-id: sayportservice #sayportservice为consul中注册的服务名
-      path: /wahaha/**  # /lujieni/wahaha/zuul & /lujieni/sayportservice/zuul 都可以访问,因为默认基于consul中服务的代理也是生效的,除非ignored-services: '*'
+      path: /wahaha/**  # /lujieni/wahaha/love/zuul & /lujieni/sayportservice/love/zuul 都可以访问,因为默认基于consul中服务的代理也是生效的,除非ignored-services: '*'
+  ignored-services: "*" # 不能再使用微服务名字去访问
   sensitive-headers:    # 敏感的请求头为空,这样设置后Cookie才可以被正确传递
-  ignored-services: '*'
-hystrix:
-  command:
-    default: #如果要通过特定的服务,改成对应服务id
-      execution:
-        timeout:
-          enabled: true
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000 #60秒超时,hystrix激活
+
+ribbon:
+  ReadTimeout: 3000  #请求处理的超时时间
+  ConnectTimeout: 2000  #请求连接的超时时间
