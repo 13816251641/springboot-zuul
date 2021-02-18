@@ -22,8 +22,8 @@ zuul:
     hello: #hello只是给路由起个名字
       service-id: sayportservice #sayportservice为consul中注册的服务名
       path: /wahaha/**  # /lujieni/wahaha/love/zuul & /lujieni/sayportservice/love/zuul 都可以访问,因为默认基于consul中服务的代理也是生效的,除非ignored-services: '*'
-  ignored-services: "*" # 不能再使用微服务名字去访问
-  sensitive-headers:    # 敏感的请求头为空,这样设置后Cookie才可以被正确传递
+  ignored-services: "*" # *代表所有的服务都不能使用微服务名字去访问
+  sensitive-headers:    # 敏感的请求头为空,这样设置后Cookie才可以被zuul正确传递到下级服务
 
 ribbon:
   ReadTimeout: 3000  #请求处理的超时时间
