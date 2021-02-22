@@ -108,7 +108,7 @@ public class AuthFilter extends ZuulFilter {
             response.setErrorCode(Response.ERROR_REDIRECT);
             response.setResult("by /lujieni/wahaha/love/zuul must has user parameter");
             requestContext.setResponseBody(JSON.toJSONString(response));//结果转为json
-            /* return false代表不需要过滤,不会执行本fliter的run方法 */
+            /* return false不会执行本fliter的run方法 */
             return false;
         }
         return true;
