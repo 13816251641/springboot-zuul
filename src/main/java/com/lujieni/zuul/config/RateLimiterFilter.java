@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class RateLimiterFilter extends ZuulFilter {
 
     //每秒产生1000个令牌
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(1);
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(1000);
 
     @Override
     public String filterType() {
@@ -37,20 +37,19 @@ public class RateLimiterFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext requestContext = RequestContext.getCurrentContext();
-        //就相当于每调用一次tryAcquire()方法，令牌数量减1，当1000个用完后，那么后面进来的用户无法访问上面接口
-        //当然这里只写类上面一个接口，可以这么写，实际可以在这里要加一层接口判断。
-        if (!RATE_LIMITER.tryAcquire()) {
-            requestContext.setSendZuulResponse(false);
-            //HttpStatus.TOO_MANY_REQUESTS.value()里面有静态代码常量
-            requestContext.setResponseStatusCode(HttpStatus.TOO_MANY_REQUESTS.value());
-            return false;//不调用本filter的run方法,不会调用下级服务
-        }
         return true;
     }
 
     @Override
     public Object run() throws ZuulException {
+        RequestContext requestContext = RequestContext.getCurrentContext();
+        //就相当于每调用一次tryAcquire()方法，令牌数量减1，当1000个用完后，那么后面进来的用户无法访问上面接口
+        //当然这里只写类上面一个接口，可以这么写，实际可以在这里要加一层接口判断。
+        if (!RATE_LIMITER.tryAcquire()) {
+            requestContext.setSendZuulResponse(false);//不会调用下级服务
+            requestContext.setResponseStatusCode(HttpStatus.TOO_MANY_REQUESTS.value());
+            return null;
+        }
         return null;
     }
 }
